@@ -36,6 +36,15 @@ function isCat(star: any): boolean { return star.phanLoai === "cat"; }
 function isTuan(star: any): boolean { return star.name === "Tuần" || star.nameCN === "旬"; }
 function isTriet(star: any): boolean { return star.name === "Triệt" || star.nameCN === "截"; }
 function isTuanTriet(star: any): boolean { return isTuan(star) || isTriet(star); }
+// Danh sách sao ẩn khỏi lá số
+const HIDDEN_STARS = new Set([
+  "Không Vong",
+  "空亡", // tên CN
+]);
+
+function isHidden(star: any): boolean {
+  return HIDDEN_STARS.has(star.name) || HIDDEN_STARS.has(star.nameCN);
+}
 
 function StarLabel({ star }: { star: any }) {
   if (isTuan(star)) return (
@@ -88,7 +97,7 @@ export default function Home() {
     const isMenh = palace.nameCN === "命宫" || palace.nameCN === "命";
     const isThan = palace.isBodyPalace;
     const allMinor = [...(palace.minorStars ?? []), ...(palace.adjectiveStars ?? [])];
-    const normalStars = allMinor.filter((s: any) => !isTuanTriet(s));
+    const normalStars = allMinor.filter((s: any) => !isTuanTriet(s) && s.name !== "Không Vong"));
     const tuanTrietStars = allMinor.filter((s: any) => isTuanTriet(s));
     const catStars = normalStars.filter(isCat);
     const hungStars = normalStars.filter((s: any) => !isCat(s));
